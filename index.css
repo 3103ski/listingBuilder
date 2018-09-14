@@ -1,0 +1,42 @@
+*,
+p {
+    font-family: 'muli';
+    padding: 0;
+    margin: 0;
+}
+
+body,
+.container-fluid {
+    margin: 0;
+    padding: 0;
+}
+
+.container-fluid {
+    height: 100vh;
+}
+
+.listing .container-fluid {
+    height: 60vh;
+}
+
+.left__panel,
+.right__panel {
+    width: 50%;
+    height: 100%;
+    float: left;
+}
+
+.left__panel {
+    box-shadow: 2px 0px 5px #00000027;
+}
+
+.input__new-listing {
+    height: 60%;
+    background-color: #96969669;
+}
+
+.map {
+    height: 40%;
+    background-image: url('./assets/index-assets/Screenshot 2018-09-11 12.43.11.png');
+    background-size: cover;
+}

@@ -4,18 +4,153 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Page Title</title>
+    <title>Listings</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap css -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Muli:300,400,600" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600" rel="stylesheet">
+
+    <!-- local index stylesheet -->
     <link rel="stylesheet" type="text/css" media="screen" href="index.css" />
 </head>
 
 <body>
 
+    <div class="container-fluid">
 
+        <!-- LEFT SIDE OF PAGE -->
+        <div class="left__panel">
+
+            <!-- Top Left New Listing Input -->
+            <div class="input__new-listing container">
+
+                <h2>Add A Listing</h2>
+
+                <form action="">
+
+                    <div class="row">
+                        <div class="col" id="form__left">
+                            <p>Name:</p>
+                            <input type="text" class="input__name">
+                            <p>Heating:</p>
+                            <select class="input__heating">
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                            <p>Year Built:</p>
+                            <input type="text" class="input__year">
+                            <p>Sq Feet:</p>
+                            <input type="text" class="input__sqFt">
+                        </div>
+
+                        <div class="col" id="form__right">
+                            <p>Price:</p>
+                            <input type="text" class="input__price">
+                            <p>Bedrooms:</p>
+                            <input type="number" class="input__room-count">
+                            <p>Bathrooms:</p>
+                            <input type="number" class="input__bath-count">
+                            <p>Garage:</p>
+                            <select class="input__garage">
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div>
+                            <button class="input__add-listing">
+                                <p>Submit</p>
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- Bottom Left Location preview On Map -->
+            <div class="map">
+                <!-- insert API for google maps that will read the location of a selected listing and show it on the map -->
+            </div>
+
+        </div>
+
+        <!-- RIGHT SIDE OF PAGE -->
+        <div class="right__panel">
+            <div class="accordion" id="accordionExample">
+
+
+                <!-- BEGIN LISTING TEMPALTE -->
+                <div class="card listing" id="listing-0">
+
+                    <!-- Entry Header/Button to unfold -->
+                    <div class="card-header listing__titlebox" id="listing__titlebox-0">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#list__item-0" aria-expanded="true" aria-controls="collapseOne">
+                                <p><span id="listing__title-0">Tacoma Home</span> <span id="listing__beds-0">3 Beds</span> <span id="listing__baths-0">2 Bath</span> <span id="listing__cost-0">$230,000</span></p>
+                          </button>
+                        </h5>
+                    </div>
+
+                    <!-- Entry listing body -->
+                    <div class="collapse show listing__body" aria-labelledby="headingOne" data-parent="#accordionExample" id="list__item-0">
+                        <div class="container-fluid">
+
+                            <div class="row">
+
+                                <div class="col">
+                                    <p>
+                                        <span class="">DESCRIPTION:</span><br>
+                                        <span>This inviting home is ready for you to move in. Main floor has a circular lay out and uses space well. Good light through out. You have the a bedroom & full bath on the main plus another bath & 2 beds upstairs. A huge dining room is off of your kitchen.Your lot is level & easy to care for & fully fenced. You come home every day to quiet dead end street. The perfect spot for commuters.</span>
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col">
+
+                                    <p>Heating: <span id="heating-0">Yes</span></p>
+                                    <p>Year Built: <span id="year-0">1945</span></p>
+                                    <p>Square Feet: <span id="sqFt-0">2,232</span></p>
+                                    <p>Price Per Sq/Ft: $<span id="price__perFt-0">105</span></p>
+
+                                </div>
+
+                                <div class="col">
+
+                                    <p>Price: $<span id="price-0">235,000</span></p>
+                                    <p>Bedrooms: <span id="bedrooms-0">3</span></p>
+                                    <p>Bathrooms: <span id="bathrooms-0">2</span></p>
+                                    <p>Garage: <span id="price__perFt-0">Yes</span></p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <!-- END LISTING TEMPLATE -->
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Bootstrap JS for CSS CDN -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <!-- local js file -->
     <script src="index.js"></script>
 </body>
 
