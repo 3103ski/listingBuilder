@@ -1,23 +1,59 @@
+/* 
+black
+#17252a	(23,37,42)
+
+dark blue
+#2b7a78	(43,122,120)
+
+mid blue
+#3aafa9	(58,175,169)
+
+light blue
+#def2f1	(222,242,241)
+
+white
+#feffff	(254,255,255)
+*/
+
+
+/* ********************** 
+** GENERAL
+********************** */
+
 *,
-p {
+p,
+body,
+.container-fluid {
     font-family: 'muli';
     padding: 0;
     margin: 0;
 }
 
-body,
-.container-fluid {
-    margin: 0;
-    padding: 0;
+.btn__row,
+.input__new-listing {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 .container-fluid {
     height: 100vh;
 }
 
-.listing .container-fluid {
-    height: 60vh;
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #17252a;
+    letter-spacing: .05em;
 }
+
+
+/* PANELS */
 
 .left__panel,
 .right__panel {
@@ -30,10 +66,65 @@ body,
     box-shadow: 2px 0px 5px #00000027;
 }
 
+
+/* **********************
+** TOP LEFT NEW LISTING
+********************** */
+
+input,
+button.input__add-listing {
+    border-radius: 5px;
+}
+
+.listing .container-fluid {
+    height: 60vh;
+}
+
 .input__new-listing {
     height: 60%;
-    background-color: #96969669;
+    /* background-color: #3aafa9; */
+    background-image: linear-gradient(to bottom right, #3aafa9, #79ece7);
 }
+
+.form__container {
+    width: 100%
+}
+
+.input__row {
+    margin: 20px;
+}
+
+.input__row p {
+    padding-top: 6px;
+}
+
+input {
+    width: 70%;
+    text-align: center;
+    margin: 2px 0px;
+    border: solid 1px #2b7a78;
+    box-shadow: 2px 1px 10px #9090907a;
+    transition: .3s;
+}
+
+input:focus {
+    outline: none;
+    border-color: black;
+    box-shadow: 2px 2px 10px #00000063;
+    transition: .3s;
+}
+
+button.input__add-listing {
+    width: 100px;
+    height: 35px;
+    background-color: #feffff;
+    text-transform: uppercase;
+}
+
+
+/* ********************** 
+*** BOTTOM LEFT MAP 
+********************** */
 
 .map {
     height: 40%;

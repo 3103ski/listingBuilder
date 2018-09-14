@@ -28,49 +28,54 @@
             <!-- Top Left New Listing Input -->
             <div class="input__new-listing container">
 
-                <h2>Add A Listing</h2>
+                <div class="form__container">
 
-                <form action="">
+                    <h2>Add A New Listing</h2>
 
-                    <div class="row">
-                        <div class="col" id="form__left">
-                            <p>Name:</p>
-                            <input type="text" class="input__name">
-                            <p>Heating:</p>
-                            <select class="input__heating">
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                            </select>
-                            <p>Year Built:</p>
-                            <input type="text" class="input__year">
-                            <p>Sq Feet:</p>
-                            <input type="text" class="input__sqFt">
+                    <form action="">
+
+                        <div class="row input__row">
+                            <div class="col" id="form__left">
+                                <p>Name:</p>
+                                <input type="text" class="input__name">
+                                <p>Year Built:</p>
+                                <input type="text" class="input__year">
+                                <p>Sq Feet:</p>
+                                <input type="text" class="input__sqFt">
+                                <p>Heating:</p>
+                                <select class="input__heating">
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                    </select>
+                            </div>
+
+                            <div class="col" id="form__right">
+                                <p>Price:</p>
+                                <input type="text" class="input__price">
+                                <p>Bedrooms:</p>
+                                <input type="number" class="input__room-count">
+                                <p>Bathrooms:</p>
+                                <input type="number" class="input__bath-count">
+                                <p>Garage:</p>
+                                <select class="input__garage">
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
                         </div>
 
-                        <div class="col" id="form__right">
-                            <p>Price:</p>
-                            <input type="text" class="input__price">
-                            <p>Bedrooms:</p>
-                            <input type="number" class="input__room-count">
-                            <p>Bathrooms:</p>
-                            <input type="number" class="input__bath-count">
-                            <p>Garage:</p>
-                            <select class="input__garage">
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div>
+                        <div class="row btn__row">
+                            <!-- <div> -->
                             <button class="input__add-listing">
-                                <p>Submit</p>
-                            </button>
+                                    <p>Submit</p>
+                                </button>
+                            <!-- </div> -->
                         </div>
-                    </div>
 
-                </form>
+                    </form>
+
+                </div>
+
             </div>
 
             <!-- Bottom Left Location preview On Map -->
@@ -104,7 +109,7 @@
                             <div class="row">
 
                                 <div class="col">
-                                    <p>
+                                    <p class="">
                                         <span class="">DESCRIPTION:</span><br>
                                         <span>This inviting home is ready for you to move in. Main floor has a circular lay out and uses space well. Good light through out. You have the a bedroom & full bath on the main plus another bath & 2 beds upstairs. A huge dining room is off of your kitchen.Your lot is level & easy to care for & fully fenced. You come home every day to quiet dead end street. The perfect spot for commuters.</span>
                                     </p>
