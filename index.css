@@ -30,7 +30,8 @@ body,
 }
 
 .btn__row,
-.input__new-listing {
+.input__new-listing,
+.listing__titlebox {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -64,6 +65,8 @@ h6 {
 
 .left__panel {
     box-shadow: 2px 0px 5px #00000027;
+    z-index: 2;
+    position: relative;
 }
 
 
@@ -76,13 +79,8 @@ button.input__add-listing {
     border-radius: 5px;
 }
 
-.listing .container-fluid {
-    height: 60vh;
-}
-
 .input__new-listing {
     height: 60%;
-    /* background-color: #3aafa9; */
     background-image: linear-gradient(to bottom right, #3aafa9, #79ece7);
 }
 
@@ -130,4 +128,47 @@ button.input__add-listing {
     height: 40%;
     background-image: url('./assets/index-assets/Screenshot 2018-09-11 12.43.11.png');
     background-size: cover;
+}
+
+
+/* ********************** 
+*** LISTINGS
+********************** */
+
+.listing__titlebox {
+    padding: 0;
+    height: 60px;
+    background-color: #def2f1;
+}
+
+.listing__titlebox button.btn.btn-link,
+.listing__titlebox h5 {
+    width: 100%;
+    height: 100%;
+}
+
+.listing__titlebox button.btn.btn-link:focus,
+.listing__titlebox button.btn.btn-link:hover {
+    text-decoration: none;
+}
+
+.listing .container-fluid {
+    height: 50vh;
+    padding: 10px;
+}
+
+.detail__title {
+    font-weight: 600;
+}
+
+.listing__body p {
+    margin-bottom: 10px;
+}
+
+.listing__details {
+    padding: 0px 20px;
+}
+
+.listing__desc {
+    font-size: .85em;
 }
