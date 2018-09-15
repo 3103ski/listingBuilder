@@ -75,8 +75,9 @@ h6 {
 ********************** */
 
 input,
-button.input__add-listing {
+button.input__add-btn {
     border-radius: 5px;
+    box-shadow: 2px 1px 10px #9090907a;
 }
 
 .input__new-listing {
@@ -101,7 +102,6 @@ input {
     text-align: center;
     margin: 2px 0px;
     border: solid 1px #2b7a78;
-    box-shadow: 2px 1px 10px #9090907a;
     transition: .3s;
 }
 
@@ -112,7 +112,7 @@ input:focus {
     transition: .3s;
 }
 
-button.input__add-listing {
+button.input__add-btn {
     width: 100px;
     height: 35px;
     background-color: #feffff;

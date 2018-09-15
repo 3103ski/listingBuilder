@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Listings</title>
+    <title>Listing Builder</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap css -->
@@ -32,47 +32,43 @@
 
                     <h2>Add A New Listing</h2>
 
-                    <form action="">
-
-                        <div class="row input__row">
-                            <div class="col" id="form__left">
-                                <p>Name:</p>
-                                <input type="text" class="input__name">
-                                <p>Year Built:</p>
-                                <input type="text" class="input__year">
-                                <p>Sq Feet:</p>
-                                <input type="text" class="input__sqFt">
-                                <p>Heating:</p>
-                                <select class="input__heating">
+                    <div class="row input__row">
+                        <div class="col" id="form__left">
+                            <p>Name:</p>
+                            <input type="text" class="input__name">
+                            <p>Year Built:</p>
+                            <input type="text" class="input__year">
+                            <p>Sq Feet:</p>
+                            <input type="text" class="input__sqFt">
+                            <p>Heating:</p>
+                            <select class="input__heating">
                                         <option value="yes">Yes</option>
                                         <option value="no">No</option>
                                     </select>
-                            </div>
+                        </div>
 
-                            <div class="col" id="form__right">
-                                <p>Price:</p>
-                                <input type="text" class="input__price">
-                                <p>Bedrooms:</p>
-                                <input type="number" class="input__room-count">
-                                <p>Bathrooms:</p>
-                                <input type="number" class="input__bath-count">
-                                <p>Garage:</p>
-                                <select class="input__garage">
+                        <div class="col" id="form__right">
+                            <p>Price:</p>
+                            <input type="text" class="input__price">
+                            <p>Bedrooms:</p>
+                            <input type="number" class="input__room-count">
+                            <p>Bathrooms:</p>
+                            <input type="number" class="input__bath-count">
+                            <p>Garage:</p>
+                            <select class="input__garage">
                                     <option value="yes">Yes</option>
                                     <option value="no">No</option>
                                 </select>
-                            </div>
                         </div>
+                    </div>
 
-                        <div class="row btn__row">
-                            <!-- <div> -->
-                            <button class="input__add-listing">
+                    <div class="row btn__row">
+                        <!-- <div> -->
+                        <button class="input__add-btn">
                                     <p>ADD</p>
                                 </button>
-                            <!-- </div> -->
-                        </div>
-
-                    </form>
+                        <!-- </div> -->
+                    </div>
 
                 </div>
 
@@ -87,11 +83,10 @@
 
         <!-- RIGHT SIDE OF PAGE -->
         <div class="right__panel">
-            <div class="accordion" id="all__listings">
+            <div class="accordion list__container" id="all__listings">
 
                 <!-- BEGIN LISTING TEMPALTE -->
-                <div class="card listing" id="listing-0">
-                    <!-- Entry Header/Button to unfold -->
+                <!-- <div class="card listing" id="listing-0">
                     <div class="card-header listing__titlebox" id="listing__titlebox">
                         <h5 class="mb-0">
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#list__item-0" aria-expanded="true" aria-controls="list__item-0">
@@ -99,7 +94,6 @@
                           </button>
                         </h5>
                     </div>
-                    <!-- Entry listing body -->
                     <div class="collapse listing__body" aria-labelledby="headingOne" data-parent="#all__listings" id="list__item-0">
                         <div class="container-fluid">
                             <div class="row">
@@ -126,12 +120,11 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!-- END LISTING TEMPLATE -->
 
                 <!-- BEGIN LISTING TEMPALTE -->
-                <div class="card listing" id="listing-1">
-                    <!-- Entry Header/Button to unfold -->
+                <!-- <div class="card listing" id="listing-1">
                     <div class="card-header listing__titlebox" id="listing__titlebox">
                         <h5 class="mb-0">
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#list__item-1" aria-expanded="true" aria-controls="list__item-0">
@@ -139,7 +132,6 @@
                               </button>
                         </h5>
                     </div>
-                    <!-- Entry listing body -->
                     <div class="collapse listing__body" aria-labelledby="headingOne" data-parent="#all__listings" id="list__item-1">
                         <div class="container-fluid">
                             <div class="row">
@@ -166,7 +158,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!-- END LISTING TEMPLATE -->
 
             </div>
