@@ -158,7 +158,8 @@ textarea {
 }
 
 .listing .container-fluid {
-    height: 40vh;
+    max-height: 400px;
+    overflow: scroll;
     padding: 10px;
 }
 

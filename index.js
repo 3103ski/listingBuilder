@@ -61,35 +61,9 @@ var dataModule = (function() {
             return ID;
         },
 
-        newListing: function(
-            name,
-            year,
-            sqFt,
-            heating,
-            price,
-            bedCount,
-            bathCount,
-            garage,
-            description,
-            address,
-            city,
-            state
-        ) {
+        newListing: function(name, year, sqFt, heating, price, bedCount, bathCount, garage, description, address, city, state) {
 
-            newHome = new Listing(
-                name,
-                year,
-                sqFt,
-                heating,
-                price,
-                bedCount,
-                bathCount,
-                garage,
-                description,
-                address,
-                city,
-                state
-            );
+            newHome = new Listing(name, year, sqFt, heating, price, bedCount, bathCount, garage, description, address, city, state);
 
             data.listings.push(newHome);
 
@@ -97,7 +71,7 @@ var dataModule = (function() {
 
         },
 
-        // calculate price per square foot and return cost
+        // calculate price per square foot and return cost 
 
         test: function() {
             return data;
@@ -187,7 +161,7 @@ var UIModule = (function() {
 
             list = DOMstrings.listingContainer;
 
-            template = '<div class="card listing" id="listing-%id%"><div class="card-header listing__titlebox" id="listing__titlebox"><h5 class="mb-0"><button class="btn btn-link" type="button" data-toggle="collapse" data-target="#list__item-%id%" aria-expanded="true" aria-controls="list__item-0"><p><span id="listing__title">%title%</span> <span id="listing__beds">%beds% Beds</span> <span id="listing__baths">%bath% Bath</span> <span id="listing__cost">$%price%</span></p></button></h5></div><div class="collapse listing__body" aria-labelledby="headingOne" data-parent="#all__listings" id="list__item-%id%"><div class="container-fluid"><div class="row"><div class="col"><p class=""><span class="detail__title">DESCRIPTION:</span><br><span class="listing__desc">%description%</span></p></div></div><div class="row listing__details"><div class="col"><p><span class="detail__title">Heating:</span> <span id="heating">%heating%</span></p><p><span class="detail__title">Year Built:</span> <span id="year">%year%</span></p><p><span class="detail__title">Square Feet:</span> <span id="sqFt">%sqft%</span></p><p><span class="detail__title">Price Per Sq/Ft:</span> $<span id="price__perFt">%ppsf%</span></p></div><div class="col"><p><span class="detail__title">Price:</span> $<span id="price">%price%</span></p><p><span class="detail__title">Bedrooms:</span> <span id="bedrooms">%beds%</span></p><p><span class="detail__title">Bathrooms:</span> <span id="bathrooms">%bath%</span></p><p><span class="detail__title">Garage:</span> <span id="price__perFt">%garage%</span></p></div></div></div></div></div>';
+            template = '<div class="card listing" id="listing-%id%"><div class="card-header listing__titlebox" id="listing__titlebox"><h5 class="mb-0"><button class="btn btn-link" type="button" data-toggle="collapse" data-target="#list__item-%id%" aria-expanded="true" aria-controls="list__item-0"><p><span id="listing__title">%title%</span> <span id="listing__beds">%beds% Beds</span> <span id="listing__baths">%bath% Bath</span> <span id="listing__cost">$%price%</span></p></button></h5></div><div class="collapse listing__body" aria-labelledby="headingOne" data-parent="#all__listings" id="list__item-%id%"><div class="container-fluid"><div class="row"><div class="col"><p class=""><span class="detail__title">DESCRIPTION:</span><br><span class="listing__desc">%description%</span><br><br><span class="detail__title">ADDRESS:</span><br><span class="listing__address">%address%<br>%city%, %state%</span></p></div></div><div class="row listing__details"><div class="col"><p><span class="detail__title">Heating:</span> <span id="heating">%heating%</span></p><p><span class="detail__title">Year Built:</span> <span id="year">%year%</span></p><p><span class="detail__title">Square Feet:</span> <span id="sqFt">%sqft%</span></p><p><span class="detail__title">Price Per Sq/Ft:</span> $<span id="price__perFt">%ppsf%</span></p></div><div class="col"><p><span class="detail__title">Price:</span> $<span id="price">%price%</span></p><p><span class="detail__title">Bedrooms:</span> <span id="bedrooms">%beds%</span></p><p><span class="detail__title">Bathrooms:</span> <span id="bathrooms">%bath%</span></p><p><span class="detail__title">Garage:</span> <span id="price__perFt">%garage%</span></p></div></div></div></div></div>';
 
             newListing = template.replace('%title%', listingData.name);
             newListing = newListing.replace('%beds%', listingData.bedCount);
@@ -207,6 +181,9 @@ var UIModule = (function() {
             newListing = newListing.replace('%id%', ID);
             newListing = newListing.replace('%id%', ID);
             newListing = newListing.replace('%id%', ID);
+            newListing = newListing.replace('%address%', listingData.address);
+            newListing = newListing.replace('%city%', listingData.city);
+            newListing = newListing.replace('%state%', listingData.state);
 
             document.querySelector(list).insertAdjacentHTML('beforeend', newListing);
 
@@ -281,12 +258,15 @@ var controllerModule = (function(mapCtrl, dataCtrl, UICtrl) {
             input.state
         );
 
+        // only adds listing if all required fields have been entered
+
         ///// add listing to UI
         UIModule.addListing(newHome);
 
         ///// clears inputs
         UICtrl.clearInputs();
 
+        //// removes 'no listing' placeholder when list is empty
         UICtrl.removeNoListings();
 
 
