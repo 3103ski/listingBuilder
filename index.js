@@ -43,8 +43,6 @@ var dataModule = (function() {
         listings: []
     };
 
-
-
     // store field data
 
     return {
@@ -67,7 +65,42 @@ var dataModule = (function() {
 
             data.listings.push(newHome);
 
-            return newHome;
+            function createAddress(add, ci, st) {
+                var addressString = add + ' ' + ci + ' ' + st;
+                return addressString;
+            }
+            addressString = createAddress(address, city, state);
+
+            return newHome, addressString;
+
+        },
+
+        getLatLong: function(addString) {
+
+            function showResult(result) {
+                // document.getElementById('latitude').value = result.geometry.location.lat();
+                console.log(result.geometry.location.lat());
+                console.log(result.geometry.location.lng());
+                // document.getElementById('longitude').value = result.geometry.location.lng();
+            }
+
+            function getLatitudeLongitude(callback, address) {
+                // If adress is not supplied, use default value 'Ferrol, Galicia, Spain'
+                address = address || 'Ferrol, Galicia, Spain';
+                // Initialize the Geocoder
+                geocoder = new google.maps.Geocoder();
+                if (geocoder) {
+                    geocoder.geocode({
+                        'address': address
+                    }, function(results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            callback(results[0]);
+                        }
+                    });
+                }
+            }
+
+            getLatitudeLongitude(showResult, addString);
 
         },
 
@@ -263,13 +296,15 @@ var controllerModule = (function(mapCtrl, dataCtrl, UICtrl) {
         ///// add listing to UI
         UIModule.addListing(newHome);
 
+        console.log(addressString + ' : this is inside the controller function');
+
         ///// clears inputs
         UICtrl.clearInputs();
 
         //// removes 'no listing' placeholder when list is empty
         UICtrl.removeNoListings();
 
-
+        dataCtrl.getLatLong(addressString);
 
     };
 
