@@ -78,10 +78,14 @@ var dataModule = (function() {
         getLatLong: function(addString) {
 
             function showResult(result) {
-                // document.getElementById('latitude').value = result.geometry.location.lat();
                 console.log(result.geometry.location.lat());
                 console.log(result.geometry.location.lng());
-                // document.getElementById('longitude').value = result.geometry.location.lng();
+
+                var latitude, longitude;
+
+                latitude = result.geometry.location.lat();
+                longitude = result.geometry.location.lng();
+                updateMap(latitude, longitude);
             }
 
             function getLatitudeLongitude(callback, address) {
@@ -98,9 +102,31 @@ var dataModule = (function() {
                         }
                     });
                 }
+
             }
 
             getLatitudeLongitude(showResult, addString);
+
+            function updateMap(lat, lng) {
+                // The location of Uluru
+                var uluru = {
+                    // lat: 47.2981173,
+                    // lng: -122.3882006
+                    lat: parseInt(lat),
+                    lng: parseInt(lng)
+                };
+                // The map, centered at Uluru
+                var map = new google.maps.Map(
+                    document.getElementById('map'), {
+                        zoom: 7,
+                        center: uluru
+                    });
+                // The marker, positioned at Uluru
+                var marker = new google.maps.Marker({
+                    position: uluru,
+                    map: map
+                });
+            }
 
         },
 
