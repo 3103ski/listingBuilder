@@ -1,12 +1,11 @@
 /**
  * TODO LIST
  * 
- *  - validate input and only add listing if all fieldsa re filled in
- *  - calculate cost per square ft and add to listing method
- *  - update form BG to image
- *  - update listing delete button
- *  - add hover effect to listing delete button
- *  - 
+ *  - validate input and only add listing if all fieldsa are filled in
+ *  - add hover effect to listing buttons
+ *  - update style of input title
+ *  - style placeholder texts
+ * 
  * 
  */
 
@@ -93,10 +92,6 @@ var mapModule = (function() {
             locationString = address + ' ' + city + ' ' + state;
 
             console.log(locationString + ' : this is the address being mapped out');
-
-            // console.log(data);
-            // console.log(index + ' : this should be the card that was clicked');
-            // console.log(data.listings[index].address);
 
             addressToMap(locationString);
         },
@@ -268,14 +263,17 @@ var UIModule = (function() {
         },
 
         addListing: function(listingData) {
-            var template, list, newListing, ID;
+            var template, list, newListing, ID, ppsf;
 
             ID = parseInt(dataModule.newID()) - 1;
-            console.log(ID);
+            // console.log(ID);
 
             list = DOMstrings.listingContainer;
 
-            template = '<div class="card listing" id="listing-%id%"><div class="card-header listing__titlebox"><h5 class="mb-0"><button class="btn btn-link" type="button" data-toggle="collapse" data-target="#list__item-%id%" aria-expanded="true" aria-controls="list__item-0"><p><span id="listing__title">%title%</span> <span id="listing__beds">%beds% Beds</span> <span id="listing__baths">%bath% Bath</span> <span id="listing__cost">$%price%</span></p></button></h5><div><h2 class="map__listing">X</h2></div><h2 class="remove__listing">X</h2></div><div class="collapse listing__body" aria-labelledby="headingOne" data-parent="#all__listings" id="list__item-%id%"><div class="container-fluid"><div class="row"><div class="col"><p class=""><span class="detail__title">DESCRIPTION:</span><br><span class="listing__desc">%description%</span><br><br><span class="detail__title">ADDRESS:</span><br><span class="listing__address">%address%<br>%city%, %state%</span></p></div></div><div class="row listing__details"><div class="col"><p><span class="detail__title">Heating:</span> <span id="heating">%heating%</span></p><p><span class="detail__title">Year Built:</span> <span id="year">%year%</span></p><p><span class="detail__title">Square Feet:</span> <span id="sqFt">%sqft%</span></p><p><span class="detail__title">Price Per Sq/Ft:</span> $<span id="price__perFt">%ppsf%</span></p></div><div class="col"><p><span class="detail__title">Price:</span> $<span id="price">%price%</span></p><p><span class="detail__title">Bedrooms:</span> <span id="bedrooms">%beds%</span></p><p><span class="detail__title">Bathrooms:</span> <span id="bathrooms">%bath%</span></p><p><span class="detail__title">Garage:</span> <span id="price__perFt">%garage%</span></p></div></div></div></div></div>';
+            ppsf = parseInt(listingData.price) / parseInt(listingData.sqFt);
+            // console.log(ppsf);
+
+            template = '<div class="card listing" id="listing-%id%"><div class="card-header listing__titlebox"><h5 class="mb-0"><button class="btn btn-link" type="button" data-toggle="collapse" data-target="#list__item-%id%" aria-expanded="true" aria-controls="list__item-0"><span id="listing__title">%title%</span> <span id="listing__beds">%beds% Beds</span> <span id="listing__baths">%bath% Bath</span> <span id="listing__cost">$%price%</span></button></h5><div><div><h2 class="map__listing"><i class="fas fa-map-marked-alt"></i></h2></div></div><div><div><div><h2 class="remove__listing"><i class="fas fa-times-circle"></i></h2></div></div></div></div><div class="collapse listing__body" aria-labelledby="headingOne" data-parent="#all__listings" id="list__item-%id%"><div class="container-fluid"><div class="row"><div class="col"><p class=""><span class="detail__title">DESCRIPTION:</span><br><span class="listing__desc">%description%</span><br><br><span class="detail__title">ADDRESS:</span><br><span class="listing__address">%address%<br>%city%, %state%</span></p></div></div><div class="row listing__details"><div class="col"><p><span class="detail__title">Heating:</span> <span id="heating">%heating%</span></p><p><span class="detail__title">Year Built:</span> <span id="year">%year%</span></p><p><span class="detail__title">Square Feet:</span> <span id="sqFt">%sqft%</span></p><p><span class="detail__title">Price Per Sq/Ft:</span> $<span id="price__perFt">%ppsf%</span></p></div><div class="col"><p><span class="detail__title">Price:</span> $<span id="price">%price%</span></p><p><span class="detail__title">Bedrooms:</span> <span id="bedrooms">%beds%</span></p><p><span class="detail__title">Bathrooms:</span> <span id="bathrooms">%bath%</span></p><p><span class="detail__title">Garage:</span> <span id="price__perFt">%garage%</span></p></div></div></div></div></div>';
 
             newListing = template.replace('%title%', listingData.name);
             newListing = newListing.replace('%beds%', listingData.bedCount);
@@ -284,9 +282,7 @@ var UIModule = (function() {
             newListing = newListing.replace('%bath%', listingData.bathCount);
             newListing = newListing.replace('%year%', listingData.year);
             newListing = newListing.replace('%heating%', listingData.heating);
-            // 
-            newListing = newListing.replace('%ppsf%', listingData.sqFt);
-            // replace ppsf ^ with square foot cost method
+            newListing = newListing.replace('%ppsf%', ppsf);
             newListing = newListing.replace('%sqft%', listingData.sqFt);
             newListing = newListing.replace('%price%', listingData.price);
             newListing = newListing.replace('%price%', listingData.price);
@@ -388,11 +384,12 @@ var controllerModule = (function(mapCtrl, dataCtrl, UICtrl) {
     ctrlPreviewMap = function(e) {
         var listingID, listings;
 
-        listingID = e.target.parentNode.parentNode.parentNode.id;
-        if (listingID) {
+        listingID = e.target.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+        if (listingID.length === 9) {
             splitID = listingID.split('-');
             cardID = parseInt(splitID[1]);
             mapCtrl.previewListing(cardID);
+            console.log(listingID);
         }
 
     };
@@ -402,10 +399,10 @@ var controllerModule = (function(mapCtrl, dataCtrl, UICtrl) {
         var listingID, listings;
 
         // correctly target listing ID on click
-        listingID = e.target.parentNode.parentNode.id;
+        listingID = e.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
 
         // checks for ID
-        if (listingID) {
+        if (listingID.length === 9) {
             splitID = listingID.split('-');
             IDnumb = parseInt(splitID[1]);
             // }
@@ -422,6 +419,8 @@ var controllerModule = (function(mapCtrl, dataCtrl, UICtrl) {
         if (listings.listings <= 0) {
             document.querySelector(strings.listingContainer).classList.add('empty__position');
             document.getElementById('no_listings').style.display = 'flex';
+
+            mapCtrl.diplayOnMap('seattle washington');
         }
     };
 
@@ -429,6 +428,7 @@ var controllerModule = (function(mapCtrl, dataCtrl, UICtrl) {
         inIt: function() {
             console.log('App is running');
             setupEventListeners();
+            mapCtrl.diplayOnMap('seattle washington');
         }
     };
 

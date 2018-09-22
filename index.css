@@ -24,7 +24,6 @@ white
 p,
 body,
 .container-fluid {
-    font-family: 'muli';
     padding: 0;
     margin: 0;
 }
@@ -54,9 +53,11 @@ h2,
 h3,
 h4,
 h5,
-h6 {
-    color: #17252a;
+h6,
+span {
+    color: #2b7a78;
     letter-spacing: .05em;
+    font-family: 'muli';
 }
 
 
@@ -77,7 +78,7 @@ h6 {
 
 
 /* **********************
-** TOP LEFT NEW LISTING
+** LEFT NEW LISTING
 ********************** */
 
 input,
@@ -88,7 +89,10 @@ button.input__add-btn {
 
 .input__new-listing {
     height: 100%;
-    background-image: linear-gradient(to bottom right, #3aafa9, #79ece7);
+    /* background-image: linear-gradient(to bottom right, #3aafa9, #79ece7); */
+    /* background-image: url(./assets/index-assets/city.jpeg); */
+    background: linear-gradient( rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.11)), url(./assets/index-assets/city.jpeg);
+    background-size: cover;
 }
 
 .form__container {
@@ -136,13 +140,18 @@ textarea {
 ********************** */
 
 #all__listings {
-    background-color: #c5c5c557;
+    /* background-color: #c5c5c557; */
+    background-color: #def2f1;
     overflow: auto;
     height: 60%;
 }
 
+#no_listings {
+    color: #2b7a78;
+}
+
 .listing__titlebox {
-    background-color: #def2f1;
+    background-image: linear-gradient(to bottom right, #3aafa9, #79ece7);
     padding: 0;
     height: 60px;
 }
@@ -186,11 +195,25 @@ textarea {
 }
 
 
-/* removal button */
+/*  buttons */
 
 .remove__listing:hover,
 .map__listing:hover {
     cursor: pointer;
+}
+
+.fa-map-marked-alt,
+.fa-times-circle {
+    font-size: .7em;
+    padding: 0px 5px;
+    color: #2b7a78;
+    transition: .1s;
+}
+
+.fa-map-marked-alt:hover,
+.fa-times-circle:hover {
+    color: white;
+    transition: .2s;
 }
 
 
