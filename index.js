@@ -1,17 +1,112 @@
+/**
+ * TODO LIST
+ * 
+ *  - validate input and only add listing if all fieldsa re filled in
+ *  - calculate cost per square ft and add to listing method
+ *  - update form BG to image
+ *  - update listing delete button
+ *  - add hover effect to listing delete button
+ *  - 
+ * 
+ */
+
+
+
 // ***********************
 // Map  Module
 // ***********************
 
 var mapModule = (function() {
 
-    // retrieve addresses from input 
+    addressToMap = function(locStr) {
 
-    // convert address to coordinates
+        function getLatitudeLongitude(callback, address) {
+            // If adress is not supplied, use default value 'Ferrol, Galicia, Spain'
+            address = address || 'Ferrol, Galicia, Spain';
+            // Initialize the Geocoder
+            geocoder = new google.maps.Geocoder();
+            if (geocoder) {
+                geocoder.geocode({
+                    'address': address
+                }, function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        callback(results[0]);
+                    }
+                });
+            }
+        }
 
-    // add coordinates to map html
+        function updateMap(lat, lng) {
 
-    // remove when listing is deleted
+            var location, map, marker;
 
+            // The coordinates of the entered location
+            location = {
+                lat: parseInt(lat),
+                lng: parseInt(lng)
+            };
+            // The map, centered at location
+            map = new google.maps.Map(
+                document.getElementById('map'), {
+                    zoom: 8,
+                    center: location
+                });
+            // The marker, positioned at location
+            marker = new google.maps.Marker({
+                position: location,
+                map: map
+            });
+        }
+
+        getLatitudeLongitude(showResult, locStr);
+
+        function showResult(result) {
+            console.log(result.geometry.location.lat() + ' : This is the latitude of the mapped location');
+            console.log(result.geometry.location.lng() + ' : This is the longitude of the mapped location');
+
+            var latitude, longitude;
+
+            latitude = result.geometry.location.lat();
+            longitude = result.geometry.location.lng();
+            updateMap(latitude, longitude);
+        }
+
+    }
+
+    return {
+
+        previewListing: function(id) {
+            var ids, index, data, locationString, address, city, state;
+
+            data = dataModule.listingArray();
+
+            ids = data.listings.map(function(current) {
+                return current.id;
+            });
+
+            index = ids.indexOf(id);
+
+            address = data.listings[index].address;
+            city = data.listings[index].city;
+            state = data.listings[index].state;
+
+            locationString = address + ' ' + city + ' ' + state;
+
+            console.log(locationString + ' : this is the address being mapped out');
+
+            // console.log(data);
+            // console.log(index + ' : this should be the card that was clicked');
+            // console.log(data.listings[index].address);
+
+            addressToMap(locationString);
+        },
+
+        diplayOnMap: function(addString) {
+            addressToMap(addString);
+        }
+
+
+    };
 })();
 
 
@@ -22,9 +117,9 @@ var mapModule = (function() {
 
 var dataModule = (function() {
 
-    // Function constructor for listings
+    var data, Listing;
 
-    var Listing = function(name, year, sqFt, heating, price, bedCount, bathCount, garage, description, address, city, state) {
+    Listing = function(name, year, sqFt, heating, price, bedCount, bathCount, garage, description, address, city, state, id) {
         this.name = name;
         this.year = year;
         this.sqFt = sqFt;
@@ -37,23 +132,22 @@ var dataModule = (function() {
         this.address = address;
         this.city = city;
         this.state = state;
+        this.id = id;
     };
 
-    var data = {
+    data = {
         listings: []
     };
-
-    // store field data
 
     return {
 
         newID: function() {
             var ID;
 
-            if (data.listings.length <= 0) {
-                ID = 0;
+            if (data.listings.length > 0) {
+                ID = data.listings[data.listings.length - 1].id + 1;
             } else {
-                ID = data.listings.length + 1;
+                ID = 0;
             }
 
             return ID;
@@ -61,78 +155,34 @@ var dataModule = (function() {
 
         newListing: function(name, year, sqFt, heating, price, bedCount, bathCount, garage, description, address, city, state) {
 
-            newHome = new Listing(name, year, sqFt, heating, price, bedCount, bathCount, garage, description, address, city, state);
+            var listingID;
+
+            listingID = this.newID();
+            newHome = new Listing(name, year, sqFt, heating, price, bedCount, bathCount, garage, description, address, city, state, listingID);
 
             data.listings.push(newHome);
 
-            function createAddress(add, ci, st) {
-                var addressString = add + ' ' + ci + ' ' + st;
-                return addressString;
-            }
-            addressString = createAddress(address, city, state);
-
-            return newHome, addressString;
-
+            return newHome;
         },
 
-        getLatLong: function(addString) {
+        deleteListing: function(id) {
+            var ids, index;
 
-            function showResult(result) {
-                console.log(result.geometry.location.lat());
-                console.log(result.geometry.location.lng());
+            ids = data.listings.map(function(current) {
+                return current.id;
+            });
 
-                var latitude, longitude;
+            index = ids.indexOf(id);
 
-                latitude = result.geometry.location.lat();
-                longitude = result.geometry.location.lng();
-                updateMap(latitude, longitude);
-            }
+            console.log(data.listings[index].address);
 
-            function getLatitudeLongitude(callback, address) {
-                // If adress is not supplied, use default value 'Ferrol, Galicia, Spain'
-                address = address || 'Ferrol, Galicia, Spain';
-                // Initialize the Geocoder
-                geocoder = new google.maps.Geocoder();
-                if (geocoder) {
-                    geocoder.geocode({
-                        'address': address
-                    }, function(results, status) {
-                        if (status == google.maps.GeocoderStatus.OK) {
-                            callback(results[0]);
-                        }
-                    });
-                }
-
-            }
-
-            getLatitudeLongitude(showResult, addString);
-
-            function updateMap(lat, lng) {
-                // The location of Uluru
-                var uluru = {
-                    // lat: 47.2981173,
-                    // lng: -122.3882006
-                    lat: parseInt(lat),
-                    lng: parseInt(lng)
-                };
-                // The map, centered at Uluru
-                var map = new google.maps.Map(
-                    document.getElementById('map'), {
-                        zoom: 7,
-                        center: uluru
-                    });
-                // The marker, positioned at Uluru
-                var marker = new google.maps.Marker({
-                    position: uluru,
-                    map: map
-                });
+            if (index !== -1) {
+                data.listings.splice(index, 1);
             }
 
         },
 
-        // calculate price per square foot and return cost 
-
-        test: function() {
+        listingArray: function() {
             return data;
         }
 
@@ -147,7 +197,9 @@ var dataModule = (function() {
 
 var UIModule = (function() {
 
-    var DOMstrings = {
+    var DOMstrings;
+
+    DOMstrings = {
         inputName: '.input__name',
         inputYear: '.input__year',
         inputSquare: '.input__sqFt',
@@ -162,7 +214,9 @@ var UIModule = (function() {
         inputAddress: '.input__addressLine',
         inputCity: '.input__city',
         inputState: '.input__state',
-        emptyState: '.empty__position'
+        emptyState: '.empty__position',
+        removeBtn: '.remove__listing',
+        listing: '.card'
     };
 
     // update UI to show added listing
@@ -170,7 +224,7 @@ var UIModule = (function() {
     return {
 
         clearInputs: function() {
-            var fields;
+            var fields, fieldsArr;
 
             fields = document.querySelectorAll(
                 DOMstrings.inputName + ', ' +
@@ -216,11 +270,12 @@ var UIModule = (function() {
         addListing: function(listingData) {
             var template, list, newListing, ID;
 
-            ID = dataModule.newID();
+            ID = parseInt(dataModule.newID()) - 1;
+            console.log(ID);
 
             list = DOMstrings.listingContainer;
 
-            template = '<div class="card listing" id="listing-%id%"><div class="card-header listing__titlebox" id="listing__titlebox"><h5 class="mb-0"><button class="btn btn-link" type="button" data-toggle="collapse" data-target="#list__item-%id%" aria-expanded="true" aria-controls="list__item-0"><p><span id="listing__title">%title%</span> <span id="listing__beds">%beds% Beds</span> <span id="listing__baths">%bath% Bath</span> <span id="listing__cost">$%price%</span></p></button></h5></div><div class="collapse listing__body" aria-labelledby="headingOne" data-parent="#all__listings" id="list__item-%id%"><div class="container-fluid"><div class="row"><div class="col"><p class=""><span class="detail__title">DESCRIPTION:</span><br><span class="listing__desc">%description%</span><br><br><span class="detail__title">ADDRESS:</span><br><span class="listing__address">%address%<br>%city%, %state%</span></p></div></div><div class="row listing__details"><div class="col"><p><span class="detail__title">Heating:</span> <span id="heating">%heating%</span></p><p><span class="detail__title">Year Built:</span> <span id="year">%year%</span></p><p><span class="detail__title">Square Feet:</span> <span id="sqFt">%sqft%</span></p><p><span class="detail__title">Price Per Sq/Ft:</span> $<span id="price__perFt">%ppsf%</span></p></div><div class="col"><p><span class="detail__title">Price:</span> $<span id="price">%price%</span></p><p><span class="detail__title">Bedrooms:</span> <span id="bedrooms">%beds%</span></p><p><span class="detail__title">Bathrooms:</span> <span id="bathrooms">%bath%</span></p><p><span class="detail__title">Garage:</span> <span id="price__perFt">%garage%</span></p></div></div></div></div></div>';
+            template = '<div class="card listing" id="listing-%id%"><div class="card-header listing__titlebox"><h5 class="mb-0"><button class="btn btn-link" type="button" data-toggle="collapse" data-target="#list__item-%id%" aria-expanded="true" aria-controls="list__item-0"><p><span id="listing__title">%title%</span> <span id="listing__beds">%beds% Beds</span> <span id="listing__baths">%bath% Bath</span> <span id="listing__cost">$%price%</span></p></button></h5><div><h2 class="map__listing">X</h2></div><h2 class="remove__listing">X</h2></div><div class="collapse listing__body" aria-labelledby="headingOne" data-parent="#all__listings" id="list__item-%id%"><div class="container-fluid"><div class="row"><div class="col"><p class=""><span class="detail__title">DESCRIPTION:</span><br><span class="listing__desc">%description%</span><br><br><span class="detail__title">ADDRESS:</span><br><span class="listing__address">%address%<br>%city%, %state%</span></p></div></div><div class="row listing__details"><div class="col"><p><span class="detail__title">Heating:</span> <span id="heating">%heating%</span></p><p><span class="detail__title">Year Built:</span> <span id="year">%year%</span></p><p><span class="detail__title">Square Feet:</span> <span id="sqFt">%sqft%</span></p><p><span class="detail__title">Price Per Sq/Ft:</span> $<span id="price__perFt">%ppsf%</span></p></div><div class="col"><p><span class="detail__title">Price:</span> $<span id="price">%price%</span></p><p><span class="detail__title">Bedrooms:</span> <span id="bedrooms">%beds%</span></p><p><span class="detail__title">Bathrooms:</span> <span id="bathrooms">%bath%</span></p><p><span class="detail__title">Garage:</span> <span id="price__perFt">%garage%</span></p></div></div></div></div></div>';
 
             newListing = template.replace('%title%', listingData.name);
             newListing = newListing.replace('%beds%', listingData.bedCount);
@@ -245,22 +300,16 @@ var UIModule = (function() {
             newListing = newListing.replace('%state%', listingData.state);
 
             document.querySelector(list).insertAdjacentHTML('beforeend', newListing);
-
         },
-
-        // remove no listing placeholder when there is at least one listing
 
         removeNoListings: function() {
             document.querySelector(DOMstrings.listingContainer).classList.remove('empty__position');
             document.getElementById('no_listings').style.display = 'none';
         },
 
-        // delete listing 
-
-        removeListing: function() {
-
-            // check to see if there are listings, add 'empty__position' class if none
-
+        removeListing: function(selectorID) {
+            var el = document.getElementById(selectorID);
+            el.parentNode.removeChild(el);
         },
 
         getStrings: function() {
@@ -278,12 +327,16 @@ var UIModule = (function() {
 
 var controllerModule = (function(mapCtrl, dataCtrl, UICtrl) {
 
-    // build event listeners for form click and enter
+    var strings = UICtrl.getStrings();
 
     var setupEventListeners = function() {
         var DOM = UICtrl.getStrings();
 
         document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddListing);
+
+        document.querySelector(DOM.listingContainer).addEventListener('click', ctrlRemoveListing);
+
+        document.querySelector(DOM.listingContainer).addEventListener('click', ctrlPreviewMap);
 
         document.addEventListener('keypress', function(e) {
             if (e.keyCode === 13 || event.which === 13) {
@@ -294,9 +347,7 @@ var controllerModule = (function(mapCtrl, dataCtrl, UICtrl) {
 
     var ctrlAddListing = function() {
 
-        var input;
-
-        //***  newListing = new Listing(name, year, sqFt, heating, price, bedCount, bathCount, garage);***
+        var input, addressString;
 
         ///// get input data from form submission
         input = UIModule.listingInput();
@@ -317,21 +368,61 @@ var controllerModule = (function(mapCtrl, dataCtrl, UICtrl) {
             input.state
         );
 
-        // only adds listing if all required fields have been entered
-
         ///// add listing to UI
         UIModule.addListing(newHome);
-
-        console.log(addressString + ' : this is inside the controller function');
 
         ///// clears inputs
         UICtrl.clearInputs();
 
-        //// removes 'no listing' placeholder when list is empty
+        //// removes 'no listing' placeholder after first listing is added
         UICtrl.removeNoListings();
 
-        dataCtrl.getLatLong(addressString);
+        addressString = input.address + ' ' + input.city + ' ' + input.state;
 
+        mapCtrl.diplayOnMap(addressString);
+
+        // only adds listing if all required fields have been entered
+
+    };
+
+    ctrlPreviewMap = function(e) {
+        var listingID, listings;
+
+        listingID = e.target.parentNode.parentNode.parentNode.id;
+        if (listingID) {
+            splitID = listingID.split('-');
+            cardID = parseInt(splitID[1]);
+            mapCtrl.previewListing(cardID);
+        }
+
+    };
+
+    ctrlRemoveListing = function(e) {
+
+        var listingID, listings;
+
+        // correctly target listing ID on click
+        listingID = e.target.parentNode.parentNode.id;
+
+        // checks for ID
+        if (listingID) {
+            splitID = listingID.split('-');
+            IDnumb = parseInt(splitID[1]);
+            // }
+
+            // remove listing from data structure
+            dataCtrl.deleteListing(IDnumb);
+
+            // remove listing from UI
+            UICtrl.removeListing(listingID);
+        }
+
+        listings = dataCtrl.listingArray();
+
+        if (listings.listings <= 0) {
+            document.querySelector(strings.listingContainer).classList.add('empty__position');
+            document.getElementById('no_listings').style.display = 'flex';
+        }
     };
 
     return {

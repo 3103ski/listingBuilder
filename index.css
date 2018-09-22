@@ -31,7 +31,8 @@ body,
 
 .btn__row,
 .input__new-listing,
-.listing__titlebox {
+.listing__titlebox,
+.listing__titlebox p {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -150,6 +151,7 @@ textarea {
 .listing__titlebox h5 {
     width: 100%;
     height: 100%;
+    padding: 0;
 }
 
 .listing__titlebox button.btn.btn-link:focus,
@@ -171,12 +173,24 @@ textarea {
     margin-bottom: 10px;
 }
 
+.listing__titlebox p {
+    height: 60px;
+}
+
 .listing__details {
     padding: 0px 20px;
 }
 
 .listing__desc {
     font-size: .85em;
+}
+
+
+/* removal button */
+
+.remove__listing:hover,
+.map__listing:hover {
+    cursor: pointer;
 }
 
 
