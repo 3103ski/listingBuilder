@@ -89,8 +89,6 @@ button.input__add-btn {
 
 .input__new-listing {
     height: 100%;
-    /* background-image: linear-gradient(to bottom right, #3aafa9, #79ece7); */
-    /* background-image: url(./assets/index-assets/city.jpeg); */
     background: linear-gradient( rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.11)), url(./assets/index-assets/city.jpeg);
     background-size: cover;
 }
@@ -113,6 +111,7 @@ input {
     transition: .3s;
     width: 70%;
     margin: 2px 0px;
+    padding-bottom: 5px;
 }
 
 input:focus {
@@ -132,6 +131,26 @@ button.input__add-btn {
 textarea {
     resize: none;
     margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+select {
+    margin-top: 15px !important;
+    width: 120px;
+    text-align: center;
+}
+
+.empty {
+    border-color: #ff00008a !important;
+    box-shadow: 2px 2px 10px #ff000080 !important;
+    background-color: #ffbabab8 !important;
+}
+
+::placeholder {
+    color: #8b8384;
+    font-size: .8em;
+    letter-spacing: .05em;
 }
 
 

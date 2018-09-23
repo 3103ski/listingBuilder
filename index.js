@@ -1,11 +1,13 @@
 /**
  * TODO LIST
  * 
- *  - validate input and only add listing if all fieldsa are filled in
  *  - add hover effect to listing buttons
  *  - update style of input title
- *  - style placeholder texts
- * 
+ *  - fix item delete when clicking listing details
+ *  - limit square foot price to 2 decimal places
+ *  - fix bathroom - address blank removal mixup
+ *  - Format prices in listing
+ *  - Auto format price in input and restrict characters to numbers
  * 
  */
 
@@ -273,7 +275,7 @@ var UIModule = (function() {
             ppsf = parseInt(listingData.price) / parseInt(listingData.sqFt);
             // console.log(ppsf);
 
-            template = '<div class="card listing" id="listing-%id%"><div class="card-header listing__titlebox"><h5 class="mb-0"><button class="btn btn-link" type="button" data-toggle="collapse" data-target="#list__item-%id%" aria-expanded="true" aria-controls="list__item-0"><span id="listing__title">%title%</span> <span id="listing__beds">%beds% Beds</span> <span id="listing__baths">%bath% Bath</span> <span id="listing__cost">$%price%</span></button></h5><div><div><h2 class="map__listing"><i class="fas fa-map-marked-alt"></i></h2></div></div><div><div><div><h2 class="remove__listing"><i class="fas fa-times-circle"></i></h2></div></div></div></div><div class="collapse listing__body" aria-labelledby="headingOne" data-parent="#all__listings" id="list__item-%id%"><div class="container-fluid"><div class="row"><div class="col"><p class=""><span class="detail__title">DESCRIPTION:</span><br><span class="listing__desc">%description%</span><br><br><span class="detail__title">ADDRESS:</span><br><span class="listing__address">%address%<br>%city%, %state%</span></p></div></div><div class="row listing__details"><div class="col"><p><span class="detail__title">Heating:</span> <span id="heating">%heating%</span></p><p><span class="detail__title">Year Built:</span> <span id="year">%year%</span></p><p><span class="detail__title">Square Feet:</span> <span id="sqFt">%sqft%</span></p><p><span class="detail__title">Price Per Sq/Ft:</span> $<span id="price__perFt">%ppsf%</span></p></div><div class="col"><p><span class="detail__title">Price:</span> $<span id="price">%price%</span></p><p><span class="detail__title">Bedrooms:</span> <span id="bedrooms">%beds%</span></p><p><span class="detail__title">Bathrooms:</span> <span id="bathrooms">%bath%</span></p><p><span class="detail__title">Garage:</span> <span id="price__perFt">%garage%</span></p></div></div></div></div></div>';
+            template = '<div class="card listing" id="listing-%id%"><div class="card-header listing__titlebox"><h5 class="mb-0"><button class="btn btn-link" type="button" data-toggle="collapse" data-target="#list__item-%id%" aria-expanded="true" aria-controls="list__item-0"><span id="listing__title">%title%</span> <span id="listing__beds">%beds% Beds</span> <span id="listing__baths">%bath% Bath</span> <span id="listing__cost">$%price%</span></button></h5><div><div><h2 class="map__listing"><i class="fas fa-map-marked-alt"></i></h2></div></div><div><div><div><h2 class="remove__listing"><i class="fas fa-times-circle"></i></h2></div></div></div></div><div><div><div class="collapse listing__body" aria-labelledby="headingOne" data-parent="#all__listings" id="list__item-%id%"><div><div class="container-fluid"><div class="row"><div class="col"><p class=""><span class="detail__title">DESCRIPTION:</span><br><span class="listing__desc">%description%</span><br><br><span class="detail__title">ADDRESS:</span><br><span class="listing__address">%address%<br>%city%, %state%</span></p></div></div><div class="row listing__details"><div class="col"><p><span class="detail__title">Heating:</span> <span id="heating">%heating%</span></p><p><span class="detail__title">Year Built:</span> <span id="year">%year%</span></p><p><span class="detail__title">Square Feet:</span> <span id="sqFt">%sqft%</span></p><p><span class="detail__title">Price Per Sq/Ft:</span> $<span id="price__perFt">%ppsf%</span></p></div><div class="col"><p><span class="detail__title">Price:</span> $<span id="price">%price%</span></p><p><span class="detail__title">Bedrooms:</span> <span id="bedrooms">%beds%</span></p><p><span class="detail__title">Bathrooms:</span> <span id="bathrooms">%bath%</span></p><p><span class="detail__title">Garage:</span> <span id="price__perFt">%garage%</span></p></div></div></div></div></div></div></div></div>';
 
             newListing = template.replace('%title%', listingData.name);
             newListing = newListing.replace('%beds%', listingData.bedCount);
@@ -323,63 +325,116 @@ var UIModule = (function() {
 
 var controllerModule = (function(mapCtrl, dataCtrl, UICtrl) {
 
-    var strings = UICtrl.getStrings();
-
     var setupEventListeners = function() {
         var DOM = UICtrl.getStrings();
-
         document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddListing);
-
         document.querySelector(DOM.listingContainer).addEventListener('click', ctrlRemoveListing);
-
         document.querySelector(DOM.listingContainer).addEventListener('click', ctrlPreviewMap);
-
         document.addEventListener('keypress', function(e) {
             if (e.keyCode === 13 || event.which === 13) {
                 ctrlAddListing();
             }
         });
+        document.addEventListener('keypress', function() {
+            inputListener();
+        });
     };
+
+
+
+
+    var inputListener = function() {
+
+        var strings, input, allInput, inputStrings, validNames;
+
+        strings = UICtrl.getStrings();
+        input = UIModule.listingInput();
+
+        allInput = [input.name, input.year, input.sqFt, input.price, input.bedCount, input.bathCount, input.address, input.city, input.state];
+        inputStrings = [strings.inputName, strings.inputYear, strings.inputSquare, strings.inputPrice, strings.inputBedrooms, strings.inputBathrooms, strings.inputAddress, strings.inputCity, strings.inputState];
+        validNames = ['Listing Name', 'Year Built', 'Sq Feet', 'Price', 'Bedrooms', 'Bathrooms', 'Address', 'City', 'State'];
+
+        allInput.forEach(function(current, index, array) {
+            if (current !== "") {
+                document.querySelector(inputStrings[index]).classList.remove('empty');
+                document.querySelector(inputStrings[index]).placeholder = validNames[index];
+            }
+        });
+    };
+
+
 
     var ctrlAddListing = function() {
 
-        var input, addressString;
+        var input, addressString, allInput, valInputs, inputStrings, emptyNames, validNames, strings;
 
-        ///// get input data from form submission
+        strings = UICtrl.getStrings();
         input = UIModule.listingInput();
 
-        ///// add new listing to data structure
-        dataCtrl.newListing(
-            input.name,
-            input.year,
-            input.sqFt,
-            input.heating,
-            input.price,
-            input.bedCount,
-            input.bathCount,
-            input.garage,
-            input.description,
-            input.address,
-            input.city,
-            input.state
-        );
+        allInput = [input.name, input.year, input.sqFt, input.price, input.bedCount, input.bathCount, input.address, input.city, input.state];
+        inputStrings = [strings.inputName, strings.inputYear, strings.inputSquare, strings.inputPrice, strings.inputBedrooms, strings.inputBathrooms, strings.inputAddress, strings.inputCity, strings.inputState];
+        emptyNames = ['a name', 'a year', 'sq footage', 'a price', 'room count', 'bath count', 'an address', 'a city', 'a state'];
+        validNames = ['Listing Name', 'Year Built', 'Sq Feet', 'Price', 'Bedrooms', 'Bathrooms', 'Address', 'City', 'State'];
+        valInputs = 0;
 
-        ///// add listing to UI
-        UIModule.addListing(newHome);
+        inputDone = function() {
+            dataCtrl.newListing(
+                input.name,
+                input.year,
+                input.sqFt,
+                input.heating,
+                input.price,
+                input.bedCount,
+                input.bathCount,
+                input.garage,
+                input.description,
+                input.address,
+                input.city,
+                input.state
+            );
+            allInput.forEach(function(current, index, array) {
+                if (current) {
+                    document.querySelector(inputStrings[index]).classList.remove('empty');
+                    document.querySelector(inputStrings[index]).placeholder = validNames[index];
+                    valInputs--;
+                }
+            });
+            ///// add listing to UI
+            UIModule.addListing(newHome);
+            ///// clears inputs
+            UICtrl.clearInputs();
+            //// removes 'no listing' placeholder after first listing is added
+            UICtrl.removeNoListings();
+            addressString = input.address + ' ' + input.city + ' ' + input.state;
+            mapCtrl.diplayOnMap(addressString);
+        };
 
-        ///// clears inputs
-        UICtrl.clearInputs();
 
-        //// removes 'no listing' placeholder after first listing is added
-        UICtrl.removeNoListings();
+        stillInputing = function() {
+            allInput.forEach(function(current, index, array) {
+                if (current === "") {
+                    document.querySelector(inputStrings[index]).placeholder = 'Provide ' + emptyNames[index];
+                    document.querySelector(inputStrings[index]).classList.add('empty');
+                } else {
+                    valInputs++;
+                    document.querySelector(inputStrings[index]).classList.remove('empty');
+                    // console.log(valInputs);
+                }
+            });
+            if (valInputs == 9) {
+                inputDone();
 
-        addressString = input.address + ' ' + input.city + ' ' + input.state;
+            }
+        };
 
-        mapCtrl.diplayOnMap(addressString);
-
-        // only adds listing if all required fields have been entered
+        stillInputing();
 
     };
+
+
+    // only adds listing if all required fields have been entered
+
+
 
     ctrlPreviewMap = function(e) {
         var listingID, listings;
@@ -396,7 +451,9 @@ var controllerModule = (function(mapCtrl, dataCtrl, UICtrl) {
 
     ctrlRemoveListing = function(e) {
 
-        var listingID, listings;
+        var listingID, listings, strings;
+
+        strings = UICtrl.getStrings();
 
         // correctly target listing ID on click
         listingID = e.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
@@ -414,9 +471,12 @@ var controllerModule = (function(mapCtrl, dataCtrl, UICtrl) {
             UICtrl.removeListing(listingID);
         }
 
-        listings = dataCtrl.listingArray();
+        // listings = dataCtrl.listingArray();
+        data = dataCtrl.listingArray();
 
-        if (listings.listings <= 0) {
+        // console.log(data.listings);
+
+        if (data.listings <= 0) {
             document.querySelector(strings.listingContainer).classList.add('empty__position');
             document.getElementById('no_listings').style.display = 'flex';
 
