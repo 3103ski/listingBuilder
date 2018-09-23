@@ -11,8 +11,6 @@
  * 
  */
 
-
-
 // ***********************
 // Map  Module
 // ***********************
@@ -41,18 +39,17 @@ var mapModule = (function() {
 
             var location, map, marker;
 
-            // The coordinates of the entered location
             location = {
-                lat: parseInt(lat),
-                lng: parseInt(lng)
+                lat: lat,
+                lng: lng
             };
-            // The map, centered at location
+
             map = new google.maps.Map(
                 document.getElementById('map'), {
-                    zoom: 8,
+                    zoom: 11,
                     center: location
                 });
-            // The marker, positioned at location
+
             marker = new google.maps.Marker({
                 position: location,
                 map: map
@@ -62,8 +59,8 @@ var mapModule = (function() {
         getLatitudeLongitude(showResult, locStr);
 
         function showResult(result) {
-            console.log(result.geometry.location.lat() + ' : This is the latitude of the mapped location');
-            console.log(result.geometry.location.lng() + ' : This is the longitude of the mapped location');
+            // console.log(result.geometry.location.lat() + ' : This is the latitude of the mapped location');
+            // console.log(result.geometry.location.lng() + ' : This is the longitude of the mapped location');
 
             var latitude, longitude;
 
@@ -324,8 +321,7 @@ var UIModule = (function() {
 // ***********************
 
 var controllerModule = (function(mapCtrl, dataCtrl, UICtrl) {
-
-    var setupEventListeners = function() {
+    function setupEventListeners() {
         var DOM = UICtrl.getStrings();
         document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddListing);
         document.querySelector(DOM.listingContainer).addEventListener('click', ctrlRemoveListing);
@@ -338,18 +334,14 @@ var controllerModule = (function(mapCtrl, dataCtrl, UICtrl) {
         document.addEventListener('keypress', function() {
             inputListener();
         });
-    };
+    }
 
-
-
-
-    var inputListener = function() {
+    function inputListener() {
 
         var strings, input, allInput, inputStrings, validNames;
 
         strings = UICtrl.getStrings();
         input = UIModule.listingInput();
-
         allInput = [input.name, input.year, input.sqFt, input.price, input.bedCount, input.bathCount, input.address, input.city, input.state];
         inputStrings = [strings.inputName, strings.inputYear, strings.inputSquare, strings.inputPrice, strings.inputBedrooms, strings.inputBathrooms, strings.inputAddress, strings.inputCity, strings.inputState];
         validNames = ['Listing Name', 'Year Built', 'Sq Feet', 'Price', 'Bedrooms', 'Bathrooms', 'Address', 'City', 'State'];
@@ -360,11 +352,9 @@ var controllerModule = (function(mapCtrl, dataCtrl, UICtrl) {
                 document.querySelector(inputStrings[index]).placeholder = validNames[index];
             }
         });
-    };
+    }
 
-
-
-    var ctrlAddListing = function() {
+    function ctrlAddListing() {
 
         var input, addressString, allInput, valInputs, inputStrings, emptyNames, validNames, strings;
 
@@ -377,7 +367,7 @@ var controllerModule = (function(mapCtrl, dataCtrl, UICtrl) {
         validNames = ['Listing Name', 'Year Built', 'Sq Feet', 'Price', 'Bedrooms', 'Bathrooms', 'Address', 'City', 'State'];
         valInputs = 0;
 
-        inputDone = function() {
+        function inputDone() {
             dataCtrl.newListing(
                 input.name,
                 input.year,
@@ -410,7 +400,7 @@ var controllerModule = (function(mapCtrl, dataCtrl, UICtrl) {
         };
 
 
-        stillInputing = function() {
+        function stillInputing() {
             allInput.forEach(function(current, index, array) {
                 if (current === "") {
                     document.querySelector(inputStrings[index]).placeholder = 'Provide ' + emptyNames[index];
@@ -436,7 +426,7 @@ var controllerModule = (function(mapCtrl, dataCtrl, UICtrl) {
 
 
 
-    ctrlPreviewMap = function(e) {
+    function ctrlPreviewMap(e) {
         var listingID, listings;
 
         listingID = e.target.parentNode.parentNode.parentNode.parentNode.parentNode.id;
@@ -449,7 +439,7 @@ var controllerModule = (function(mapCtrl, dataCtrl, UICtrl) {
 
     };
 
-    ctrlRemoveListing = function(e) {
+    function ctrlRemoveListing(e) {
 
         var listingID, listings, strings;
 
