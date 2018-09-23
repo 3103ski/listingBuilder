@@ -3,11 +3,7 @@
  * 
  *  - add hover effect to listing buttons
  *  - update style of input title
- *  - fix item delete when clicking listing details
- *  - limit square foot price to 2 decimal places
  *  - fix bathroom - address blank removal mixup
- *  - Format prices in listing
- *  - Auto format price in input and restrict characters to numbers
  * 
  */
 
@@ -56,20 +52,19 @@ var mapModule = (function() {
             });
         }
 
-        getLatitudeLongitude(showResult, locStr);
-
         function showResult(result) {
+            var latitude, longitude;
+
             // console.log(result.geometry.location.lat() + ' : This is the latitude of the mapped location');
             // console.log(result.geometry.location.lng() + ' : This is the longitude of the mapped location');
-
-            var latitude, longitude;
 
             latitude = result.geometry.location.lat();
             longitude = result.geometry.location.lng();
             updateMap(latitude, longitude);
         }
 
-    }
+        getLatitudeLongitude(showResult, locStr);
+    };
 
     return {
 
@@ -262,17 +257,32 @@ var UIModule = (function() {
         },
 
         addListing: function(listingData) {
-            var template, list, newListing, ID, ppsf;
+            var template, list, newListing, ID, ppsf, priceInt, feetInt;
 
             ID = parseInt(dataModule.newID()) - 1;
             // console.log(ID);
 
             list = DOMstrings.listingContainer;
 
-            ppsf = parseInt(listingData.price) / parseInt(listingData.sqFt);
-            // console.log(ppsf);
+            ppsf = listingData.price / listingData.sqFt;
+            console.log(ppsf + ' : this is the outcome of the square foot formula');
 
             template = '<div class="card listing" id="listing-%id%"><div class="card-header listing__titlebox"><h5 class="mb-0"><button class="btn btn-link" type="button" data-toggle="collapse" data-target="#list__item-%id%" aria-expanded="true" aria-controls="list__item-0"><span id="listing__title">%title%</span> <span id="listing__beds">%beds% Beds</span> <span id="listing__baths">%bath% Bath</span> <span id="listing__cost">$%price%</span></button></h5><div><div><h2 class="map__listing"><i class="fas fa-map-marked-alt"></i></h2></div></div><div><div><div><h2 class="remove__listing"><i class="fas fa-times-circle"></i></h2></div></div></div></div><div><div><div class="collapse listing__body" aria-labelledby="headingOne" data-parent="#all__listings" id="list__item-%id%"><div><div class="container-fluid"><div class="row"><div class="col"><p class=""><span class="detail__title">DESCRIPTION:</span><br><span class="listing__desc">%description%</span><br><br><span class="detail__title">ADDRESS:</span><br><span class="listing__address">%address%<br>%city%, %state%</span></p></div></div><div class="row listing__details"><div class="col"><p><span class="detail__title">Heating:</span> <span id="heating">%heating%</span></p><p><span class="detail__title">Year Built:</span> <span id="year">%year%</span></p><p><span class="detail__title">Square Feet:</span> <span id="sqFt">%sqft%</span></p><p><span class="detail__title">Price Per Sq/Ft:</span> $<span id="price__perFt">%ppsf%</span></p></div><div class="col"><p><span class="detail__title">Price:</span> $<span id="price">%price%</span></p><p><span class="detail__title">Bedrooms:</span> <span id="bedrooms">%beds%</span></p><p><span class="detail__title">Bathrooms:</span> <span id="bathrooms">%bath%</span></p><p><span class="detail__title">Garage:</span> <span id="price__perFt">%garage%</span></p></div></div></div></div></div></div></div></div>';
+
+            function formatNumbers(int) {
+                if (int.length > 3 && int.length < 7) {
+                    int = int.substr(0, int.length - 3) + ',' + int.substr(int.length - 3, int.length);
+                }
+                if (int.length > 6 && int.length < 10) {
+                    int = int.substr(0, int.length - 6) + ',' + int.substr(int.length - 7, 3) + ',' + int.substr(int.length - 3, 3);
+                }
+                return int;
+            }
+
+            priceInt = formatNumbers(listingData.price);
+            feetInt = formatNumbers(listingData.sqFt);
+
+            console.log(priceInt);
 
             newListing = template.replace('%title%', listingData.name);
             newListing = newListing.replace('%beds%', listingData.bedCount);
@@ -281,10 +291,10 @@ var UIModule = (function() {
             newListing = newListing.replace('%bath%', listingData.bathCount);
             newListing = newListing.replace('%year%', listingData.year);
             newListing = newListing.replace('%heating%', listingData.heating);
-            newListing = newListing.replace('%ppsf%', ppsf);
-            newListing = newListing.replace('%sqft%', listingData.sqFt);
-            newListing = newListing.replace('%price%', listingData.price);
-            newListing = newListing.replace('%price%', listingData.price);
+            newListing = newListing.replace('%ppsf%', ppsf.toFixed(2));
+            newListing = newListing.replace('%sqft%', feetInt);
+            newListing = newListing.replace('%price%', priceInt);
+            newListing = newListing.replace('%price%', priceInt);
             newListing = newListing.replace('%garage%', listingData.garage);
             newListing = newListing.replace('%description%', listingData.description);
             newListing = newListing.replace('%id%', ID);
@@ -321,6 +331,7 @@ var UIModule = (function() {
 // ***********************
 
 var controllerModule = (function(mapCtrl, dataCtrl, UICtrl) {
+
     function setupEventListeners() {
         var DOM = UICtrl.getStrings();
         document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddListing);
@@ -335,6 +346,7 @@ var controllerModule = (function(mapCtrl, dataCtrl, UICtrl) {
             inputListener();
         });
     }
+
 
     function inputListener() {
 
@@ -356,15 +368,15 @@ var controllerModule = (function(mapCtrl, dataCtrl, UICtrl) {
 
     function ctrlAddListing() {
 
-        var input, addressString, allInput, valInputs, inputStrings, emptyNames, validNames, strings;
+        var input, addressString, allInput, inputStrings, emptyNames, validNames, valInputs, strings;
 
         strings = UICtrl.getStrings();
         input = UIModule.listingInput();
-
         allInput = [input.name, input.year, input.sqFt, input.price, input.bedCount, input.bathCount, input.address, input.city, input.state];
         inputStrings = [strings.inputName, strings.inputYear, strings.inputSquare, strings.inputPrice, strings.inputBedrooms, strings.inputBathrooms, strings.inputAddress, strings.inputCity, strings.inputState];
-        emptyNames = ['a name', 'a year', 'sq footage', 'a price', 'room count', 'bath count', 'an address', 'a city', 'a state'];
         validNames = ['Listing Name', 'Year Built', 'Sq Feet', 'Price', 'Bedrooms', 'Bathrooms', 'Address', 'City', 'State'];
+        emptyNames = ['a name', 'a year', 'sq footage', 'a price', 'room count', 'bath count', 'an address', 'a city', 'a state'];
+
         valInputs = 0;
 
         function inputDone() {
@@ -408,12 +420,10 @@ var controllerModule = (function(mapCtrl, dataCtrl, UICtrl) {
                 } else {
                     valInputs++;
                     document.querySelector(inputStrings[index]).classList.remove('empty');
-                    // console.log(valInputs);
                 }
             });
             if (valInputs == 9) {
                 inputDone();
-
             }
         };
 
